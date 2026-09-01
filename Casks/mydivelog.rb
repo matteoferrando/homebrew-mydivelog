@@ -30,8 +30,13 @@ cask "mydivelog" do
   # il sito scrive PRIMA del pulsante: su un Mac Intel il .dmg si installa e
   # l'app non si apre, e scoprirlo dopo somiglia a un difetto di chi ha
   # scaricato.
+  # Il simbolo nudo e non la stringa: la forma con ">=" e' deprecata, e brew la
+  # segnala a ogni comando che legge la cask. In Homebrew un simbolo nudo vuole
+  # gia' dire «quella versione o piu' recente». L'ha trovata brew stesso alla
+  # prima lettura, non una prova di testo: e' il motivo per cui una cask va
+  # fatta leggere a brew prima di pubblicarla.
   depends_on arch: :arm64
-  depends_on macos: ">= :monterey"
+  depends_on macos: :monterey
 
   app "MyDiveLog.app"
 
