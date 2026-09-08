@@ -105,11 +105,21 @@ jobs:
             exit 0
           fi
 
-          # `|` come separatore: l'impronta è esadecimale e la versione ha dei
-          # punti, ma un giorno qualcuno ci metterà una barra e sed morirebbe
-          # senza spiegare perché.
-          sed -i "s|^  version \".*\"$|  version \"$VERSIONE\"|" Casks/mydivelog.rb
-          sed -i "s|^  sha256 \".*\"$|  sha256 \"$SHA\"|" Casks/mydivelog.rb
+          # ► NON `sed`, E LA RAGIONE È COSTATA UN GIRO. ◄ Quando questo lavoro è
+          # passato da Linux a macOS, `sed -i` è diventato un altro programma:
+          # quello di BSD pretende un argomento per il file di riserva — `sed -i ''`
+          # — e senza risponde «invalid command code C», che non nomina la causa.
+          # Scriverlo in Python toglie la differenza: è lo stesso interprete sui
+          # due runner, e non ha un dialetto.
+          python3 - <<'FINE'
+          import io, os, re
+          v, sha = os.environ['VERSIONE'], os.environ['SHA']
+          p = 'Casks/mydivelog.rb'
+          s = io.open(p, encoding='utf8').read()
+          s = re.sub(r'^  version ".*"$', '  version "%s"' % v, s, count=1, flags=re.M)
+          s = re.sub(r'^  sha256 ".*"$', '  sha256 "%s"' % sha, s, count=1, flags=re.M)
+          io.open(p, 'w', encoding='utf8').write(s)
+          FINE
 
           # Si rilegge quello che si è scritto, invece di fidarsi di sed: una
           # sostituzione che non aggancia niente non dà errore, lascia il file
