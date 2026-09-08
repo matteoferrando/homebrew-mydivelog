@@ -36,7 +36,24 @@ permissions:
 
 jobs:
   aggiorna:
-    runs-on: ubuntu-latest
+    # ► SI GIRA SU macOS, E NON PER GUSTO. ◄ Su `ubuntu-latest` il comando `brew`
+    # non esiste: il passo che fa validare la cask muore con «command not found»
+    # ed esce 127. È successo davvero, l'8 settembre 2026, al primo giro in cui
+    # c'era qualcosa da aggiornare.
+    #
+    # ► E VALE LA PENA CAPIRE PERCHÉ NON SI ERA MAI VISTO PRIMA. ◄ Quel passo ha
+    # un `if: cambiata == 'si'`. Finché la release e la cask portavano lo stesso
+    # numero — dal 1° al 7 settembre — non c'era niente da riscrivere, il passo
+    # veniva SALTATO, e il workflow chiudeva verde ogni sei ore. *Il verde non
+    # diceva «funziona»: diceva «non ho fatto niente».* Alla prima volta che ha
+    # avuto qualcosa da fare, si è rotto.
+    #
+    # Le cask sono di macOS e `brew audit --cask` è una cosa che solo un Mac può
+    # fare davvero: `--online` scarica il pacchetto e ne verifica l'impronta. Su
+    # un runner Linux, anche installando Homebrew, quella verifica non sarebbe
+    # quella che conta. I minuti dei runner macOS sono gratuiti sui repository
+    # pubblici, e questo lo è.
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v5
 
