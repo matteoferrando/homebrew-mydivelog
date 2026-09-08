@@ -136,6 +136,17 @@ jobs:
 
       - name: Fai leggere la cask a brew
         if: steps.scrivi.outputs.cambiata == 'si'
+        # ► IL TOKEN SERVE A brew, NON A NOI. ◄ `--online` interroga l'API di
+        # GitHub per controllare l'indirizzo del pacchetto, e senza credenziali
+        # quel conto è di **60 richieste all'ora per indirizzo IP** — condiviso
+        # con tutti gli altri runner. L'8 settembre 2026 era già esaurito da
+        # qualcun altro prima che toccasse a noi, e l'audit è morto con «API rate
+        # limit exceeded»: un fallimento che non dipende da questa cask e che si
+        # ripresenta a caso. Con il `GITHUB_TOKEN` che il lavoro ha già in mano
+        # il limite diventa 5000 all'ora, ed è la stessa credenziale usata per
+        # leggere la release: non se ne crea nessuna nuova.
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           # ► brew È L'UNICO GIUDICE CHE CONTA. ◄ Le nostre prove non sanno quali
