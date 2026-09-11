@@ -10,8 +10,7 @@ cask "mydivelog" do
   version "1.8.8"
   sha256 "4224674cb02b2b1e2342d3fa44458306010bc6739c25855703e10a982217761b"
 
-  url "https://github.com/matteoferrando/MyDiveLog/releases/download/v#{version}/MyDiveLog-macOS-arm64.dmg",
-      verified: "github.com/matteoferrando/MyDiveLog/"
+  url "https://github.com/matteoferrando/MyDiveLog/releases/download/v#{version}/MyDiveLog-macOS-arm64.dmg"
   name "MyDiveLog"
   desc "Dive logbook that merges the data from several dive computers"
   homepage "https://mydivelog.site/"
