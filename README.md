@@ -1,9 +1,19 @@
 # Il tap Homebrew di MyDiveLog
 
 ```
-brew tap matteoferrando/mydivelog
-brew install --cask mydivelog
+brew install --cask matteoferrando/mydivelog/mydivelog
 ```
+
+Un comando solo: il nome intero aggiunge il tap, dà fiducia a **questa** cask e a
+nient'altro, e la installa. Homebrew non carica le cask dei tap che non sono suoi
+finché qualcuno non le dichiara fidate, quindi chi aveva installato prima — il
+tap, e poi il nome corto — glielo dice una volta sola:
+
+```
+brew trust --cask matteoferrando/mydivelog/mydivelog
+```
+
+Finché non lo fa, il suo Homebrew ignora la cask; l'app no: si aggiorna da sola.
 
 [MyDiveLog](https://mydivelog.site) è un logbook subacqueo libero: unisce le
 immersioni di computer diversi senza doppioni, le analizza, e tiene i campi che
